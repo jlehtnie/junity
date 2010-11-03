@@ -1,3 +1,4 @@
+CXX ?= g++
 LD := $(CXX)
 
 BOOST_DIR := test/boost
@@ -21,7 +22,8 @@ test: $(BOOST_REPORT)
 	$(Q) ./test.sh
 
 clean:
-	rm -f $(BOOST_OBJS) $(BOOST_PROG) $(BOOST_REPORT)
+	$(E) "  CLEAN     "
+	$(Q) rm -f $(BOOST_OBJS) $(BOOST_PROG) $(BOOST_REPORT)
 
 $(BOOST_REPORT): $(BOOST_PROG)
 	$(E) "  GENERATE  " $@
