@@ -13,5 +13,11 @@ public class ExampleTest {
         assertTrue(false);
     }
 
+    @Test
+    public void testError() {
+        Object o = null;
+        o.hashCode();
+    }
+
 }
 

@@ -20,16 +20,24 @@ class TestError(object):
         return self.to_xml()
 
 
+class TestVerdict(object):
+    SUCCESS = 0
+    FAILURE = 1
+    ERROR = 2
+
+
 class TestCase(object):
 
-    def __init__(self, name, is_failure):
+    def __init__(self, name, verdict):
         self.name = name
-        self.is_failure = is_failure
+        self.verdict = verdict
 
     def to_xml(self):
         x = ""
         x += "<testcase name=\"" + self.name + "\""
-        if self.is_failure:
+        if self.verdict == TestVerdict.ERROR:
+            x += "><error /></testcase>"
+        elif self.verdict == TestVerdict.FAILURE:
             x += "><failure /></testcase>"
         else:
             x += " />"
@@ -116,9 +124,19 @@ class BoostFormatHandler(FormatHandler):
 
     def read_test_case(self, path, element):
         name = element.getAttribute("name")
-        is_failure = element.getAttribute("result") == "failed"
-        test_case = TestCase(name, is_failure)
+        verdict = self.read_test_verdict(path, element)
+        test_case = TestCase(name, verdict)
         return test_case
+
+    def read_test_verdict(self, path, element):
+        result = element.getAttribute("result")
+        if result == "passed":
+            verdict = TestVerdict.SUCCESS
+        elif result == "failed":
+            verdict = TestVerdict.FAILURE
+        else:
+            verdict = TestVerdict.ERROR
+        return verdict
 
 
 class JUnitFormatHandler(FormatHandler):
@@ -145,9 +163,18 @@ class JUnitFormatHandler(FormatHandler):
 
     def read_test_case(self, path, element):
         name = element.getAttribute("name")
-        is_failure = len(element.getElementsByTagName("failure")) > 0
-        test_case = TestCase(name, is_failure)
+        verdict = self.read_test_verdict(path, element)
+        test_case = TestCase(name, verdict)
         return test_case
+
+    def read_test_verdict(self, path, element):
+        if len(element.getElementsByTagName("error")) > 0:
+            verdict = TestVerdict.ERROR
+        elif len(element.getElementsByTagName("failure")) > 0:
+            verdict = TestVerdict.FAILURE
+        else:
+            verdict = TestVerdict.SUCCESS
+        return verdict
 
 
 HANDLERS = [ BoostFormatHandler(), JUnitFormatHandler() ]

@@ -12,3 +12,10 @@ BOOST_AUTO_TEST_CASE(testFailure)
     BOOST_CHECK(false);
 }
 
+BOOST_AUTO_TEST_CASE(testError)
+{
+    int a;
+    int *b = NULL;
+
+    a = *b;
+}

@@ -1,1 +1,1 @@
-<testsuites><testsuite name="ExampleTest"><testcase name="testSuccess" /><testcase name="testFailure"><failure /></testcase></testsuite></testsuites>
+<testsuites><testsuite name="ExampleTest"><testcase name="testSuccess" /><testcase name="testFailure"><failure /></testcase><testcase name="testError"><error /></testcase></testsuite></testsuites>
