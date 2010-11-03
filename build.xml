@@ -1,0 +1,40 @@
+<project default="all">
+
+    <property name="JUNIT_DIR" location="test/junit" />
+
+    <property environment="env" />
+    <path id="classpath">
+        <pathelement location="${JUNIT_DIR}" />
+        <pathelement location="${env.CLASSPATH}" />
+    </path>
+
+    <target name="all"
+            depends="test" />
+
+    <target name="compile">
+        <javac srcdir="${JUNIT_DIR}"
+               includeantruntime="false">
+            <classpath refid="classpath" />
+        </javac>
+    </target>
+
+    <target name="clean">
+        <delete>
+            <fileset dir="${JUNIT_DIR}" includes="*.class" />
+            <fileset dir="${JUNIT_DIR}" includes="*.xml" />
+        </delete>
+    </target>
+
+    <target name="test"
+            depends="compile">
+        <junit>
+            <classpath refid="classpath" />
+            <formatter type="xml" />
+            <test name="ExampleTest"
+                  todir="${JUNIT_DIR}"
+                  outfile="ExampleTest" />
+        </junit>
+    </target>
+
+</project>
+

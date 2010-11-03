@@ -121,7 +121,36 @@ class BoostFormatHandler(FormatHandler):
         return test_case
 
 
-HANDLERS = [ BoostFormatHandler() ]
+class JUnitFormatHandler(FormatHandler):
+
+    def accept(self, path, text):
+        return text.find("<testcase") != -1
+
+    def read(self, path, text):
+        try:
+            document = xml.dom.minidom.parseString(text)
+        except:
+            raise FormatHandlerError(path, "bad file format")
+        test_suites = TestSuites()
+        for element in document.getElementsByTagName("testsuite"):
+            test_suites.append(self.read_test_suite(path, element))
+        return test_suites
+
+    def read_test_suite(self, path, element):
+        name = element.getAttribute("name")
+        test_suite = TestSuite(name)
+        for element in element.getElementsByTagName("testcase"):
+            test_suite.append(self.read_test_case(path, element))
+        return test_suite
+
+    def read_test_case(self, path, element):
+        name = element.getAttribute("name")
+        is_failure = len(element.getElementsByTagName("failure")) > 0
+        test_case = TestCase(name, is_failure)
+        return test_case
+
+
+HANDLERS = [ BoostFormatHandler(), JUnitFormatHandler() ]
 
 
 class FormatHandlerError(Exception):
