@@ -199,7 +199,8 @@ class TitanFormatHandler(FormatHandler):
             fails = int(match.group("fail"))
             errors = int(match.group("error"))
         except:
-            raise FormatHandlerError(path, "bad file format")
+            raise FormatHandlerError(path, "This TITAN log file has invalid "
+                                           "format.")
         return self.generate_test_suites(path, nones, passes, inconcs, fails,
                                          errors)
 
@@ -238,20 +239,20 @@ def parse_xml(path, text):
     try:
         return xml.dom.minidom.parseString(text)
     except:
-        raise FormatHandlerError(path, "bad file format")
+        raise FormatHandlerError(path, "This XML file is not well-formed.")
 
 
 def handle(path):
     try:
         text = open(path).read()
     except:
-        raise FormatHandlerError(path, "cannot read file")
+        raise FormatHandlerError(path, "This file cannot be read.")
 
     for handler in HANDLERS:
         if handler.accept(path, text):
             return handler.read(path, text)
 
-    raise FormatHandlerError(path, "unknown file format")
+    raise FormatHandlerError(path, "This file has unknown format.")
 
 
 def main():

@@ -1,1 +1,1 @@
-<testsuites><testsuite name="foo"><error message="cannot read file" /></testsuite></testsuites>
+<testsuites><testsuite name="foo"><error message="This file cannot be read." /></testsuite></testsuites>
