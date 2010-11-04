@@ -21,4 +21,3 @@ License
 -------
 
 See `LICENSE`.
-

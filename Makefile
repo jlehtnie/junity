@@ -49,4 +49,3 @@ $(JUNIT_REPORT):
 	$(Q) $(ANT) $(ANTFLAGS) test
 
 .PHONY: all clean test
-

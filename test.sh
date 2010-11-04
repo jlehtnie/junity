@@ -27,4 +27,3 @@ check "test/boost/ExampleTest.xml" "examples/ExampleTest.xml"
 check "test/junit/ExampleTest.xml" "examples/ExampleTest.xml"
 check "test/boost/ExampleTest.xml test/boost/ExampleTest.xml" \
     "examples/ExampleTest-ExampleTest.xml"
-
