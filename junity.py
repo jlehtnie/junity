@@ -101,6 +101,16 @@ class FormatHandler(object):
         raise NotImplementedError
 
 
+class FormatHandlerError(Exception):
+
+    def __init__(self, path, message):
+        self.test_suite = TestSuite(os.path.basename(path))
+        self.test_suite.append(TestSuiteError(message))
+
+    def format(self):
+        return TestSuites([ self.test_suite ])
+
+
 class BoostFormatHandler(FormatHandler):
 
     def accept(self, path, text):
@@ -220,35 +230,13 @@ class TitanFormatHandler(FormatHandler):
         return test_case
 
 
-HANDLERS = [ BoostFormatHandler(),
-             JUnitFormatHandler(),
-             TitanFormatHandler() ]
-
-
-class FormatHandlerError(Exception):
-
-    def __init__(self, path, message):
-        self.test_suite = TestSuite(os.path.basename(path))
-        self.test_suite.append(TestSuiteError(message))
-
-    def format(self):
-        return TestSuites([ self.test_suite ])
-
-
-def parse_xml(path, text):
-    try:
-        return xml.dom.minidom.parseString(text)
-    except:
-        raise FormatHandlerError(path, "This XML file is not well-formed.")
-
-
-def handle(path):
+def handle(path, handlers):
     try:
         text = open(path).read()
     except:
         raise FormatHandlerError(path, "This file cannot be read.")
 
-    for handler in HANDLERS:
+    for handler in handlers:
         if handler.accept(path, text):
             return handler.read(path, text)
 
@@ -259,13 +247,24 @@ def main():
     if len(sys.argv) < 2:
         usage()
 
+    handlers = [ BoostFormatHandler(),
+                 JUnitFormatHandler(),
+                 TitanFormatHandler() ]
+
     test_suites = TestSuites()
     for arg in sys.argv[1:]:
         try:
-            test_suites.extend(handle(arg))
+            test_suites.extend(handle(arg, handlers))
         except FormatHandlerError, error:
             test_suites.extend(error.format())
     print test_suites
+
+
+def parse_xml(path, text):
+    try:
+        return xml.dom.minidom.parseString(text)
+    except:
+        raise FormatHandlerError(path, "This XML file is not well-formed.")
 
 
 def usage():
