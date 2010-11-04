@@ -218,7 +218,7 @@ def main():
 
 
 def usage():
-    sys.exit("Usage: junity.py FILE ...")
+    sys.exit("Usage: junity.py FILE [FILE ...]")
 
 
 if __name__ == "__main__":
