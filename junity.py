@@ -6,20 +6,6 @@ import sys
 import xml.dom.minidom
 
 
-class TestError(object):
-
-    def __init__(self, message):
-        self.message = message
-
-    def to_xml(self):
-        x = ""
-        x += "<error message=\"" + self.message + "\" />"
-        return x
-
-    def __str__(self):
-        return self.to_xml()
-
-
 class TestVerdict(object):
     SUCCESS = 0
     FAILURE = 1
@@ -47,11 +33,25 @@ class TestCase(object):
         return self.to_xml()
 
 
+class TestSuiteError(object):
+
+    def __init__(self, message):
+        self.message = message
+
+    def to_xml(self):
+        x = ""
+        x += "<error message=\"" + self.message + "\" />"
+        return x
+
+    def __str__(self):
+        return self.to_xml()
+
+
 class TestSuite(object):
 
     def __init__(self, name):
         self.name = name
-        self.children = []
+        self.children = [] # TestCase or TestSuiteError
 
     def append(self, child):
         self.children.append(child)
@@ -184,7 +184,7 @@ class FormatHandlerError(Exception):
 
     def __init__(self, path, message):
         self.test_suite = TestSuite(os.path.basename(path))
-        self.test_suite.append(TestError(message))
+        self.test_suite.append(TestSuiteError(message))
 
     def format(self):
         return TestSuites([ self.test_suite ])
