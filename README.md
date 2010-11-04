@@ -2,8 +2,8 @@ JUnity
 ======
 
 JUnity converts and merges test reports into a single JUnit test report. At
-the moment JUnity has rudimentary support for Boost and JUnit test report
-formats.
+the moment JUnity has rudimentary support for Boost, JUnit and TITAN test
+report formats.
 
 
 Usage
