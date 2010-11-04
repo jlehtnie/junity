@@ -1,1 +1,1 @@
-<testsuites><testsuite name="TitanTest.log"><testcase name="none-0"><failure /></testcase><testcase name="pass-0" /><testcase name="inconc-0"><error /></testcase><testcase name="fail-0"><failure /></testcase><testcase name="error-0"><error /></testcase></testsuite></testsuites>
+<testsuites><testsuite name="TitanTest.log"><testcase name="testNone"><failure /></testcase><testcase name="testPass" /><testcase name="testInconc"><error /></testcase><testcase name="testFail"><failure /></testcase><testcase name="testError"><error /></testcase></testsuite></testsuites>

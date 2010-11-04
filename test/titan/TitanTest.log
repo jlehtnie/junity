@@ -1,1 +1,5 @@
-00:00:00.000000 STATISTICS - Verdict statistics: 1 none (20.00 %), 1 pass (20.00 %), 1 inconc (20.00 %), 1 fail (20.00 %), 1 error (20.00 %).
+00:00:00.000000 TESTCASE TitanTest.ttcn:0(testcase:testNone) Test case testNone finished. Verdict: none
+00:00:00.000000 TESTCASE TitanTest.ttcn:0(testcase:testPass) Test case testPass finished. Verdict: pass
+00:00:00.000000 TESTCASE TitanTest.ttcn:0(testcase:testInconc) Test case testInconc finished. Verdict: inconc
+00:00:00.000000 TESTCASE TitanTest.ttcn:0(testcase:testFail) Test case testFail finished. Verdict: fail
+00:00:00.000000 TESTCASE TitanTest.ttcn:0(testcase:testError) Test case testError finished. Verdict: error

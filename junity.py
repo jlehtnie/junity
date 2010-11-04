@@ -182,50 +182,42 @@ class JUnitFormatHandler(FormatHandler):
 
 class TitanFormatHandler(FormatHandler):
 
-    VERDICT_STATISTICS = re.compile(r"""
-                                    (?P<none>\d+)\ none
-                                    \ \([^\)]+\),\ 
-                                    (?P<pass>\d+)\ pass
-                                    \ \([^\)]+\),\ 
-                                    (?P<inconc>\d+)\ inconc
-                                    \ \([^\)]+\),\ 
-                                    (?P<fail>\d+)\ fail
-                                    \ \([^\)]+\),\ 
-                                    (?P<error>\d+)\ error
-                                    \ \([^\)]+\).
-                                    """, re.VERBOSE)
+    VERDICT = re.compile(r"""
+                          Test\ case\ 
+                          (?P<testcase>[^\ ]+)\ 
+                          finished.\ 
+                          Verdict:\ 
+                          (?P<verdict>[a-z]+)
+                          """, re.VERBOSE)
     
     def accept(self, path, text):
-        return text.find("Verdict statistics") != -1
+        return text.find("TESTCASE") != -1
 
     def read(self, path, text):
-        try:
-            match = TitanFormatHandler.VERDICT_STATISTICS.search(text)
-            nones = int(match.group("none"))
-            passes = int(match.group("pass"))
-            inconcs = int(match.group("inconc"))
-            fails = int(match.group("fail"))
-            errors = int(match.group("error"))
-        except:
-            raise FormatHandlerError(path, "This TITAN log file has invalid "
-                                           "format.")
-        return self.generate_test_suites(path, nones, passes, inconcs, fails,
-                                         errors)
-
-    def generate_test_suites(self, path, nones, passes, inconcs, fails,
-                             errors):
         test_suite = TestSuite(os.path.basename(path))
-        for num in range(nones):
-            test_suite.append(TestCase("none-%d" % num, TestVerdict.FAILURE))
-        for num in range(passes):
-            test_suite.append(TestCase("pass-%d" % num, TestVerdict.SUCCESS))
-        for num in range(inconcs):
-            test_suite.append(TestCase("inconc-%d" % num, TestVerdict.ERROR))
-        for num in range(fails):
-            test_suite.append(TestCase("fail-%d" % num, TestVerdict.FAILURE))
-        for num in range(errors):
-            test_suite.append(TestCase("error-%d" % num, TestVerdict.ERROR))
+        matches = TitanFormatHandler.VERDICT.findall(text)
+        for match in matches:
+            test_suite.append(self.read_test_case(path, match))
+        if len(test_suite.children) == 0:
+            raise FormatHandlerError(path, "This TITAN log file appears to "
+                                           "contain no test cases.")
         return TestSuites([ test_suite ])
+
+    def read_test_case(self, path, match):
+        name = match[0]
+        verdict = match[1]
+        if verdict == "none":
+            verdict = TestVerdict.FAILURE
+        elif verdict == "pass":
+            verdict = TestVerdict.SUCCESS
+        elif verdict == "inconc":
+            verdict = TestVerdict.ERROR
+        elif verdict == "fail":
+            verdict = TestVerdict.FAILURE
+        else:
+            verdict = TestVerdict.ERROR
+        test_case = TestCase(name, verdict)
+        return test_case
 
 
 HANDLERS = [ BoostFormatHandler(),
