@@ -104,13 +104,16 @@ class FormatHandler(object):
 class BoostFormatHandler(FormatHandler):
 
     def accept(self, path, text):
-        return text.find("<TestCase") != -1
+        return text.find("<TestSuite") != -1
 
     def read(self, path, text):
         document = parse_xml(path, text)
         test_suites = TestSuites()
         for element in document.getElementsByTagName("TestSuite"):
-            test_suites.append(self.read_test_suite(path, element))
+            try:
+                test_suites.append(self.read_test_suite(path, element))
+            except FormatHandlerError, error:
+                test_suites.extend(error.format())
         return test_suites
 
     def read_test_suite(self, path, element):
@@ -118,6 +121,11 @@ class BoostFormatHandler(FormatHandler):
         test_suite = TestSuite(name)
         for element in element.getElementsByTagName("TestCase"):
             test_suite.append(self.read_test_case(path, element))
+        if len(test_suite.children) == 0:
+            raise FormatHandlerError(path, "This Boost test suite appears "
+                                           "to contain no test cases. Is "
+                                           "--report_level=detailed used "
+                                           "alongside --report_format=xml?")
         return test_suite
 
     def read_test_case(self, path, element):
