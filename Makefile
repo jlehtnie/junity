@@ -35,6 +35,7 @@ test: $(BOOST_REPORT) $(BOOST_REPORT2) $(JUNIT_REPORT)
 
 clean:
 	$(E) "  CLEAN     "
+	$(Q) find -X . -name *.pyc | xargs rm
 	$(Q) rm -f $(BOOST_OBJS) $(BOOST_PROG) $(BOOST_REPORT) $(BOOST_REPORT2)
 	$(Q) $(ANT) $(ANTFLAGS) clean
 

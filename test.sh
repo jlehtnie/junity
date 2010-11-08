@@ -7,7 +7,7 @@ check()
     ARGS=$1
     EXPECTED=$2
 
-    ./junity.py $ARGS > $RECEIVED
+    bin/junity $ARGS > $RECEIVED
 
     diff $RECEIVED $EXPECTED > /dev/null 2>&1
     if [ $? == 0 ]
@@ -22,7 +22,7 @@ check()
 
 check "foo" "examples/cannot-read-file.xml"
 check "Makefile" "examples/unknown-file-format.xml"
-check "junity.py" "examples/bad-file-format.xml"
+check "junity/main.py" "examples/bad-file-format.xml"
 check "test/boost/ExampleTest.xml" "examples/ExampleTest.xml"
 check "test/boost/boost_report_level.xml" "examples/boost_report_level.xml"
 check "test/junit/ExampleTest.xml" "examples/ExampleTest.xml"
