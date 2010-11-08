@@ -21,8 +21,19 @@ termination but are reported as test errors in the combined test report.
 JUnity is primarily targeted towards the Hudson continuous integration server.
 
 
-Testing
--------
+Installation
+------------
+
+Install the program with setup.py:
+
+    python setup.py install
+
+
+Development
+-----------
+
+To run the program from the repository, add the root of the working tree to
+the `$PYTHONPATH` environment variable.
 
 Run the regression test suite with Make:
 
