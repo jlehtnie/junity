@@ -266,7 +266,3 @@ def parse_xml(path, text):
 
 def usage():
     sys.exit("Usage: junity.py FILE [FILE ...]")
-
-
-if __name__ == "__main__":
-    main()
