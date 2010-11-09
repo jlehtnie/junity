@@ -29,16 +29,16 @@ Q := @
 
 all: test
 
-test: $(BOOST_REPORT) $(BOOST_REPORT2) $(JUNIT_REPORT)
-	$(E) "  TEST      "
-	$(Q) ./test.sh
-
 clean:
 	$(E) "  CLEAN     "
 	$(Q) rm -fr build
-	$(Q) find -X . -name *.pyc | xargs rm
+	$(Q) find . -name *.pyc | xargs rm
 	$(Q) rm -f $(BOOST_OBJS) $(BOOST_PROG) $(BOOST_REPORT) $(BOOST_REPORT2)
 	$(Q) $(ANT) $(ANTFLAGS) clean
+
+test: $(BOOST_REPORT) $(BOOST_REPORT2) $(JUNIT_REPORT)
+	$(E) "  TEST      "
+	$(Q) ./test.sh
 
 $(BOOST_REPORT): $(BOOST_PROG)
 	$(E) "  GENERATE  " $@
