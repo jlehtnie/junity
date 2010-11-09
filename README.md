@@ -24,7 +24,7 @@ JUnity is primarily targeted towards the Hudson continuous integration server.
 Installation
 ------------
 
-Install the program with setup.py:
+Install the program with `setup.py`:
 
     python setup.py install
 
