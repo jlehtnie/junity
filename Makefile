@@ -37,7 +37,7 @@ all: test
 
 clean:
 	$(E) "  CLEAN     "
-	$(Q) python setup.py --quiet clean
+	$(Q) rm -fr build 
 	$(Q) find . -name *.pyc | xargs rm -f
 	$(Q) rm -f $(BOOST_OBJS) $(BOOST_PROG) $(BOOST_REPORT) $(BOOST_REPORT2)
 	$(Q) $(ANT) $(ANTFLAGS) clean
