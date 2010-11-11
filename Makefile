@@ -21,6 +21,12 @@ BOOST_OPTS2 := --log_level=nothing \
                --report_sink=$(BOOST_REPORT2) \
                --result_code=no
 
+BOOST_REPORT3 := $(BOOST_DIR)/boost_test_log.xml
+BOOST_OPTS3 := --log_level=all \
+               --log_format=xml \
+               --log_sink=$(BOOST_REPORT3) \
+               --result_code=no
+
 JUNIT_DIR := test/junit
 JUNIT_REPORT := $(JUNIT_DIR)/ExampleTest.xml
 
@@ -36,7 +42,7 @@ clean:
 	$(Q) rm -f $(BOOST_OBJS) $(BOOST_PROG) $(BOOST_REPORT) $(BOOST_REPORT2)
 	$(Q) $(ANT) $(ANTFLAGS) clean
 
-test: $(BOOST_REPORT) $(BOOST_REPORT2) $(JUNIT_REPORT)
+test: $(BOOST_REPORT) $(BOOST_REPORT2) $(BOOST_REPORT3) $(JUNIT_REPORT)
 	$(E) "  TEST      "
 	$(Q) ./test.sh
 
@@ -47,6 +53,10 @@ $(BOOST_REPORT): $(BOOST_PROG)
 $(BOOST_REPORT2): $(BOOST_PROG)
 	$(E) "  GENERATE  " $@
 	$(Q) $(BOOST_PROG) $(BOOST_OPTS2)
+
+$(BOOST_REPORT3): $(BOOST_PROG)
+	$(E) "  GENERATE  " $@
+	$(Q) $(BOOST_PROG) $(BOOST_OPTS3) > /dev/null 2>&1
 
 $(BOOST_PROG): $(BOOST_OBJS)
 	$(E) "  LINK      " $@

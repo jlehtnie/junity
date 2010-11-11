@@ -147,8 +147,14 @@ class BoostFormatHandler(FormatHandler):
             verdict = TestVerdict.SUCCESS
         elif result == "failed":
             verdict = TestVerdict.FAILURE
-        else:
+        elif result == "aborted":
             verdict = TestVerdict.ERROR
+        else:
+            raise FormatHandlerError(path, "This appears to be a Boost test "
+                                           "log rather than a Boost test "
+                                           "report. Use "
+                                           "--report_format=xml and "
+                                           "--report_level=detailed.")
         return verdict
 
 
