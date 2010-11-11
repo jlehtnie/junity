@@ -1,1 +1,0 @@
-<testsuites><testsuite name="boost_report_level.xml"><error message="This Boost test suite appears to contain no test cases. Is --report_level=detailed used alongside --report_format=xml?" /></testsuite></testsuites>

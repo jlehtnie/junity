@@ -1,1 +1,0 @@
-<testsuites><testsuite name="boost_test_log.xml"><error message="This appears to be a Boost test log rather than a Boost test report. Use --report_format=xml and --report_level=detailed." /></testsuite></testsuites>

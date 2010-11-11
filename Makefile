@@ -15,13 +15,13 @@ BOOST_OPTS := --log_level=nothing \
               --report_sink=$(BOOST_REPORT) \
               --result_code=no
 
-BOOST_REPORT2 := $(BOOST_DIR)/boost_report_level.xml
+BOOST_REPORT2 := $(BOOST_DIR)/boost-report-level.xml
 BOOST_OPTS2 := --log_level=nothing \
                --report_format=xml \
                --report_sink=$(BOOST_REPORT2) \
                --result_code=no
 
-BOOST_REPORT3 := $(BOOST_DIR)/boost_test_log.xml
+BOOST_REPORT3 := $(BOOST_DIR)/boost-test-log.xml
 BOOST_OPTS3 := --log_level=all \
                --log_format=xml \
                --log_sink=$(BOOST_REPORT3) \

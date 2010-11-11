@@ -1,0 +1,1 @@
+<testsuites><testsuite name="boost-report-level.xml"><error message="This Boost test report does not follow the expected format. Use --report_format=xml and --report_level=detailed." /></testsuite></testsuites>

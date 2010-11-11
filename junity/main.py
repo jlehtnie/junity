@@ -110,6 +110,10 @@ class FormatHandlerError(Exception):
 
 class BoostFormatHandler(FormatHandler):
 
+    ERROR_MESSAGE="This Boost test report does not follow the expected " \
+                  "format. Use --report_format=xml and " \
+                  "--report_level=detailed."
+
     def accept(self, path, text):
         return text.find("<TestSuite") != -1
 
@@ -129,10 +133,7 @@ class BoostFormatHandler(FormatHandler):
         for element in element.getElementsByTagName("TestCase"):
             test_suite.append(self.read_test_case(path, element))
         if len(test_suite.children) == 0:
-            raise FormatHandlerError(path, "This Boost test suite appears "
-                                           "to contain no test cases. Is "
-                                           "--report_level=detailed used "
-                                           "alongside --report_format=xml?")
+            raise FormatHandlerError(path, BoostFormatHandler.ERROR_MESSAGE)
         return test_suite
 
     def read_test_case(self, path, element):
@@ -150,11 +151,7 @@ class BoostFormatHandler(FormatHandler):
         elif result == "aborted":
             verdict = TestVerdict.ERROR
         else:
-            raise FormatHandlerError(path, "This appears to be a Boost test "
-                                           "log rather than a Boost test "
-                                           "report. Use "
-                                           "--report_format=xml and "
-                                           "--report_level=detailed.")
+            raise FormatHandlerError(path, BoostFormatHandler.ERROR_MESSAGE)
         return verdict
 
 
