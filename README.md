@@ -12,7 +12,7 @@ Usage
 Given one or more input files, JUnity tries to interpret them as test reports
 and produces a combined test report to standard output:
 
-    junity.py results1.log results2.log results3.log > results.xml
+    junity results1.log results2.log results3.log > results.xml
 
 JUnity is designed for continuous integration scripts. For reliability,
 operational failures (such as unreadable input files) do not cause program
