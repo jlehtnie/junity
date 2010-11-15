@@ -85,7 +85,7 @@ def write(path, text):
 def write_output(path, test_suites):
     text = test_suites.to_xml()
     if path is not None:
-        write(path, text)
+        write(path, text + "\n")
     else:
         print text
 
