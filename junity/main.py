@@ -76,7 +76,7 @@ def write(path, text):
         outfile = open(path, "w")
         outfile.write(text)
     except:
-        die("")
+        die(path, "cannot write file")
     finally:
         if outfile is not None:
             outfile.close()
