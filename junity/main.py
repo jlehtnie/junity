@@ -65,10 +65,13 @@ def read(path):
 
 
 def read_output(path, handlers):
-    if not path or not os.path.exists(path):
-        return base.TestSuites()
-    return handle(path, handlers)
-
+    test_suites = base.TestSuites()
+    if path is not None and os.path.exists(path):
+        try:
+            test_suites.extend(handle(path, handlers))
+        except base.FormatHandlerError, error:
+            test_suites.extend(error.format())
+    return test_suites
 
 def write(path, text):
     outfile = None
