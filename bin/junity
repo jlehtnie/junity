@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+#
+# JUnity
+#
+# Convert and merge test reports into a single JUnit test report.
+#
+# https://github.com/jvirtanen/junity
+#
+
 import junity
 
 junity.main()
