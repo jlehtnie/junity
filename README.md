@@ -33,8 +33,8 @@ JUnity is primarily targeted towards the Hudson continuous integration server.
 JUnity reads Boost test reports in the XML format. Give the following command
 line arguments to the executable:
 
-   --report_format=xml
-   --report_level=detailed
+    --report_format=xml
+    --report_level=detailed
 
 
 Installation
