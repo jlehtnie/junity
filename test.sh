@@ -4,17 +4,16 @@ RECEIVED="temp.xml"
 
 assert_equal()
 {
-    EXPECTED=$1
-    
-    diff $RECEIVED $EXPECTED > /dev/null 2>&1
+    FILE1=$1
+    FILE2=$2
+
+    diff $FILE1 $FILE2 > /dev/null 2>&1
     if [ $? == 0 ]
     then
         echo "pass"
     else
         echo "fail"
     fi
-
-    rm -f $RECEIVED
 }
 
 assert_file_equal1()
@@ -23,7 +22,8 @@ assert_file_equal1()
     EXPECTED=$2
 
     write_to_file $ARGS
-    assert_equal $EXPECTED
+    assert_equal $RECEIVED $EXPECTED
+    tear_down
 }
 
 assert_file_equal2()
@@ -34,7 +34,8 @@ assert_file_equal2()
 
     write_to_file $ARGS1
     write_to_file $ARGS2
-    assert_equal $EXPECTED
+    assert_equal $RECEIVED $EXPECTED
+    tear_down
 }
 
 assert_stdout_equal()
@@ -43,7 +44,8 @@ assert_stdout_equal()
     EXPECTED=$2
 
     direct_to_file $ARGS
-    assert_equal $EXPECTED
+    assert_equal $RECEIVED $EXPECTED
+    tear_down
 }
 
 direct_to_file()
@@ -51,6 +53,11 @@ direct_to_file()
     ARGS=$*
     
     bin/junity $ARGS > $RECEIVED
+}
+
+tear_down()
+{
+    rm -f $RECEIVED
 }
 
 write_to_file()
