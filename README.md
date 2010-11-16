@@ -21,6 +21,22 @@ termination but are reported as test errors in the combined test report.
 JUnity is primarily targeted towards the Hudson continuous integration server.
 
 
+### Options
+
+- `-o FILE`: Write combined test report to a file. If the file does not exist,
+  JUnity will create it. If the file exists, JUnity interprets it as a test
+  report.
+
+
+### Boost
+
+JUnity reads Boost test reports in the XML format. Give the following command
+line arguments to the executable:
+
+   --report_format=xml
+   --report_level=detailed
+
+
 Installation
 ------------
 
@@ -35,7 +51,7 @@ Development
 To run the program from the repository, add the root of the working tree to
 the `$PYTHONPATH` environment variable.
 
-Run the regression test suite with Make:
+Run the regression test suite with `Makefile`:
 
     make test
 
