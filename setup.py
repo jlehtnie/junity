@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name="junity",
-      version="0.0.1",
+      version="0.0.2",
       description="JUnity",
       url="https://github.com/jvirtanen/junity",
       author="Jussi Virtanen",
