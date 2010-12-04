@@ -94,4 +94,4 @@ def write_output(path, test_suites):
 
 
 def usage():
-    sys.exit("Usage: junity.py [-o FILE] FILE [FILE ...]")
+    sys.exit("Usage: junity [-o FILE] FILE [FILE ...]")
