@@ -4,7 +4,9 @@ LD := $(CXX)
 ANT ?= ant
 ANTFLAGS := -logfile /dev/null -quiet
 
-BOOST_DIR := test/boost
+TEST_DIR = test
+
+BOOST_DIR := $(TEST_DIR)/boost
 BOOST_REPORT := $(BOOST_DIR)/ExampleTest.xml
 BOOST_OBJS := $(BOOST_DIR)/ExampleTest.o
 BOOST_LIBS := -lboost_unit_test_framework
@@ -27,7 +29,7 @@ BOOST_OPTS3 := --log_level=all \
                --log_sink=$(BOOST_REPORT3) \
                --result_code=no
 
-JUNIT_DIR := test/junit
+JUNIT_DIR := $(TEST_DIR)/junit
 JUNIT_REPORT := $(JUNIT_DIR)/ExampleTest.xml
 
 E := @echo
@@ -44,7 +46,7 @@ clean:
 
 test: $(BOOST_REPORT) $(BOOST_REPORT2) $(BOOST_REPORT3) $(JUNIT_REPORT)
 	$(E) "  TEST      "
-	$(Q) ./test.sh
+	$(Q) $(TEST_DIR)/test.sh
 
 $(BOOST_REPORT): $(BOOST_PROG)
 	$(E) "  GENERATE  " $@
