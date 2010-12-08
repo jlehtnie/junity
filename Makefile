@@ -46,7 +46,7 @@ clean:
 
 test: $(BOOST_REPORT) $(BOOST_REPORT2) $(BOOST_REPORT3) $(JUNIT_REPORT)
 	$(E) "  TEST      "
-	$(Q) $(TEST_DIR)/test.sh
+	$(Q) $(TEST_DIR)/suite.sh
 
 $(BOOST_REPORT): $(BOOST_PROG)
 	$(E) "  GENERATE  " $@
