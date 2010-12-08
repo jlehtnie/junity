@@ -1,10 +1,12 @@
 CXX ?= g++
 LD := $(CXX)
 
-ANT ?= ant
-ANTFLAGS := -logfile /dev/null -quiet
-
 TEST_DIR = test
+
+ANT_BUILDFILE := $(TEST_DIR)/build.xml
+
+ANT ?= ant
+ANTFLAGS := -buildfile $(ANT_BUILDFILE) -logfile /dev/null -quiet
 
 BOOST_DIR := $(TEST_DIR)/boost
 BOOST_REPORT := $(BOOST_DIR)/ExampleTest.xml
