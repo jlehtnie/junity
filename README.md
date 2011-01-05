@@ -27,6 +27,9 @@ JUnity is primarily targeted towards the Hudson continuous integration server.
   JUnity will create it. If the file exists, JUnity interprets it as a test
   report.
 
+- `-p`: Pretty-print the combined test report as plain text instead of the
+  JUnit test report format.
+
 
 ### Boost
 

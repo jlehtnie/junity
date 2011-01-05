@@ -2,10 +2,10 @@ import getopt
 import os.path
 import sys
 import junity.base as base
-import junity.boost as boost
-import junity.junit as junit
-import junity.pretty as pretty
-import junity.titan as titan
+from junity.boost import BoostFormatHandler
+from junity.junit import JUnitFormatHandler
+from junity.pretty import PrettyFormatHandler
+from junity.titan import TitanFormatHandler
 
 
 def die(path, message):
@@ -28,22 +28,25 @@ def handle_text(path, handlers, text):
 
 def main():
     output = None
+    pretty = False
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "o:")
+        opts, args = getopt.getopt(sys.argv[1:], "o:p")
         for opt, arg in opts:
             if opt == "-o":
                 output = arg
+            if opt == "-p":
+                pretty = True
     except getopt.GetoptError:
         usage()
 
     if len(args) == 0:
         usage()
     
-    handlers = [ boost.BoostFormatHandler(),
-                 junit.JUnitFormatHandler(),
-                 pretty.PrettyFormatHandler(),
-                 titan.TitanFormatHandler() ]
+    handlers = [ BoostFormatHandler(),
+                 JUnitFormatHandler(),
+                 PrettyFormatHandler(),
+                 TitanFormatHandler() ]
 
     test_suites = read_output(output, handlers)
     for arg in args:
@@ -51,7 +54,7 @@ def main():
             test_suites.extend(handle(arg, handlers))
         except base.FormatHandlerError, error:
             test_suites.extend(error.format())
-    write_output(output, test_suites)
+    write_output(output, test_suites, pretty)
 
 
 def read(path):
@@ -87,8 +90,8 @@ def write(path, text):
             outfile.close()
 
 
-def write_output(path, test_suites):
-    text = test_suites.to_xml()
+def write_output(path, test_suites, pretty):
+    text = test_suites.to_pretty() if pretty else test_suites.to_xml()
     if path is not None:
         write(path, text + "\n")
     else:
@@ -96,4 +99,4 @@ def write_output(path, test_suites):
 
 
 def usage():
-    sys.exit("Usage: junity [-o FILE] FILE [FILE ...]")
+    sys.exit("Usage: junity [-o FILE] [-p] FILE [FILE ...]")

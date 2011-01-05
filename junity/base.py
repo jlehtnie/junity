@@ -14,6 +14,16 @@ class TestCase(object):
         self.name = name
         self.verdict = verdict
 
+    def to_pretty(self):
+        p = ""
+        p += "- " + self.name
+        if self.verdict == TestVerdict.ERROR:
+            p += ": error"
+        if self.verdict == TestVerdict.FAILURE:
+            p += ": failure"
+        p += "\n"
+        return p
+
     def to_xml(self):
         x = ""
         x += "<testcase name=\"" + self.name + "\""
@@ -34,6 +44,11 @@ class TestSuiteError(object):
     def __init__(self, message):
         self.message = message
 
+    def to_pretty(self):
+        p = ""
+        p += "- Error: " + self.message + "\n"
+        return p
+
     def to_xml(self):
         x = ""
         x += "<error message=\"" + self.message + "\" />"
@@ -51,6 +66,13 @@ class TestSuite(object):
 
     def append(self, child):
         self.children.append(child)
+
+    def to_pretty(self):
+        p = ""
+        p += self.name + "\n"
+        for child in self.children:
+            p += child.to_pretty()
+        return p
 
     def to_xml(self):
         x = ""
@@ -74,6 +96,12 @@ class TestSuites(object):
 
     def extend(self, test_suites):
         self.test_suites.extend(test_suites.test_suites)
+
+    def to_pretty(self):
+        p = ""
+        for test_suite in self.test_suites:
+            p += test_suite.to_pretty() + "\n"
+        return p.rstrip()
 
     def to_xml(self):
         x = ""
