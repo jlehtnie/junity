@@ -107,6 +107,10 @@ assert_stdout_equal "junit/ExampleTest.xml" "../examples/ExampleTest.xml"
 assert_stdout_equal "titan/TitanTest.log" "../examples/TitanTest.xml"
 assert_stdout_equal "boost/ExampleTest.xml boost/ExampleTest.xml" \
     "../examples/ExampleTest-ExampleTest.xml"
+assert_stdout_equal "../examples/ExampleTest.txt" \
+    "../examples/ExampleTest.xml"
+assert_stdout_equal "../examples/ExampleTest-ExampleTest.txt" \
+    "../examples/ExampleTest-ExampleTest.xml"
 assert_file_equal1 "boost/ExampleTest.xml" "../examples/ExampleTest.xml"
 assert_file_equal2 "boost/ExampleTest.xml" "boost/ExampleTest.xml" \
     "../examples/ExampleTest-ExampleTest.xml"

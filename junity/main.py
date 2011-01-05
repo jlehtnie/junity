@@ -4,6 +4,7 @@ import sys
 import junity.base as base
 import junity.boost as boost
 import junity.junit as junit
+import junity.pretty as pretty
 import junity.titan as titan
 
 
@@ -41,6 +42,7 @@ def main():
     
     handlers = [ boost.BoostFormatHandler(),
                  junit.JUnitFormatHandler(),
+                 pretty.PrettyFormatHandler(),
                  titan.TitanFormatHandler() ]
 
     test_suites = read_output(output, handlers)

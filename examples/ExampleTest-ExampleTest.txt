@@ -1,0 +1,9 @@
+ExampleTest
+- testSuccess
+- testFailure: failure
+- testError: error
+
+ExampleTest
+- testSuccess
+- testFailure: failure
+- testError: error
