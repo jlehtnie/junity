@@ -42,7 +42,7 @@ all: test
 
 clean:
 	$(E) "  CLEAN     "
-	$(Q) rm -fr build 
+	$(Q) rm -fr MANIFEST build dist
 	$(Q) find . -name *.pyc | xargs rm -f
 	$(Q) rm -f $(BOOST_OBJS) $(BOOST_PROG)
 	$(Q) rm -f $(BOOST_REPORT1) $(BOOST_REPORT2) $(BOOST_REPORT3)
