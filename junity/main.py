@@ -45,8 +45,8 @@ def main():
     
     handlers = [ BoostFormatHandler(),
                  JUnitFormatHandler(),
-                 PrettyFormatHandler(),
-                 TitanFormatHandler() ]
+                 TitanFormatHandler(),
+                 PrettyFormatHandler() ]
 
     test_suites = read_output(output, handlers)
     for arg in args:
