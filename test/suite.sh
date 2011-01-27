@@ -118,5 +118,6 @@ assert_file_equal2 "boost/ExampleTest.xml" "boost/ExampleTest.xml" \
     "../examples/ExampleTest-ExampleTest.xml"
 assert_stderr_equal "-o $READONLY_FILE boost/ExampleTest.xml" \
     "cannot-write-file.xml: cannot write file"
+assert_stdout_equal "../examples/cannot-read-file.xml" \
+    "../examples/cannot-read-file.xml"
 test_suite_teardown
-

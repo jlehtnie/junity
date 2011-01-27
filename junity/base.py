@@ -139,3 +139,8 @@ def parse_xml(path, text):
         return xml.dom.minidom.parseString(text)
     except:
         raise FormatHandlerError(path, "This XML file is not well-formed.")
+
+
+def get_children_by_tag_name(element, name):
+    return filter(lambda x: x.parentNode is element,
+        element.getElementsByTagName(name))
