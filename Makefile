@@ -6,19 +6,16 @@ BOOST_REPORT1 := $(BOOST_DIR)/ExampleTest.xml
 BOOST_OPTS1 := --log_level=nothing \
               --report_format=xml \
               --report_level=detailed \
-              --report_sink=$(BOOST_REPORT1) \
               --result_code=no
 
 BOOST_REPORT2 := $(BOOST_DIR)/boost-report-level.xml
 BOOST_OPTS2 := --log_level=nothing \
                --report_format=xml \
-               --report_sink=$(BOOST_REPORT2) \
                --result_code=no
 
 BOOST_REPORT3 := $(BOOST_DIR)/boost-test-log.xml
 BOOST_OPTS3 := --log_level=all \
                --log_format=xml \
-               --log_sink=$(BOOST_REPORT3) \
                --result_code=no
 
 JUNIT_REPORT := $(JUNIT_DIR)/ExampleTest.xml
@@ -54,15 +51,15 @@ test: $(BOOST_REPORT1) $(BOOST_REPORT2) $(BOOST_REPORT3) $(JUNIT_REPORT)
 
 $(BOOST_REPORT1): $(BOOST_PROG)
 	$(E) "  GENERATE  " $@
-	$(Q) $(BOOST_PROG) $(BOOST_OPTS1)
+	$(Q) $(BOOST_PROG) $(BOOST_OPTS1) 2> $(BOOST_REPORT1)
 
 $(BOOST_REPORT2): $(BOOST_PROG)
 	$(E) "  GENERATE  " $@
-	$(Q) $(BOOST_PROG) $(BOOST_OPTS2)
+	$(Q) $(BOOST_PROG) $(BOOST_OPTS2) 2> $(BOOST_REPORT2)
 
 $(BOOST_REPORT3): $(BOOST_PROG)
 	$(E) "  GENERATE  " $@
-	$(Q) $(BOOST_PROG) $(BOOST_OPTS3) > /dev/null 2>&1
+	$(Q) $(BOOST_PROG) $(BOOST_OPTS3) > $(BOOST_REPORT3) 2> /dev/null
 
 $(BOOST_PROG): $(BOOST_OBJS)
 	$(E) "  LINK      " $@
