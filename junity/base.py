@@ -46,7 +46,7 @@ class TestSuiteError(object):
 
     def to_pretty(self):
         p = ""
-        p += "- Error: " + self.message + "\n"
+        p += "! " + self.message + "\n"
         return p
 
     def to_xml(self):

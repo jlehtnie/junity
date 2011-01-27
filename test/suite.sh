@@ -109,6 +109,7 @@ assert_stdout_equal "boost/ExampleTest.xml boost/ExampleTest.xml" \
     "../examples/ExampleTest-ExampleTest.xml"
 assert_stdout_equal "-p boost/ExampleTest.xml boost/ExampleTest.xml" \
     "../examples/ExampleTest-ExampleTest.txt"
+assert_stdout_equal "-p foo" "../examples/cannot-read-file.txt"
 assert_stdout_equal "../examples/ExampleTest.txt" \
     "../examples/ExampleTest.xml"
 assert_stdout_equal "../examples/ExampleTest-ExampleTest.txt" \
