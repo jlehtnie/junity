@@ -40,6 +40,11 @@ line arguments to the executable:
     --report_level=detailed
 
 
+### TITAN
+
+JUnity reads TITAN log files. The log message type `TESTCASE` must be active.
+
+
 Installation
 ------------
 
