@@ -12,7 +12,13 @@ class TitanFormatHandler(base.FormatHandler):
                           Verdict:\ 
                           (?P<verdict>[a-z]+)
                           """, re.VERBOSE)
-    
+
+    VERDICTS = {
+        "fail": base.TestVerdict.FAILURE,
+        "none": base.TestVerdict.FAILURE,
+        "pass": base.TestVerdict.SUCCESS
+    }
+
     def accept(self, path, text):
         return text.find("TESTCASE") != -1
 
@@ -28,16 +34,7 @@ class TitanFormatHandler(base.FormatHandler):
 
     def read_test_case(self, path, match):
         name = match[0]
-        verdict = match[1]
-        if verdict == "none":
-            verdict = base.TestVerdict.FAILURE
-        elif verdict == "pass":
-            verdict = base.TestVerdict.SUCCESS
-        elif verdict == "inconc":
-            verdict = base.TestVerdict.ERROR
-        elif verdict == "fail":
-            verdict = base.TestVerdict.FAILURE
-        else:
-            verdict = base.TestVerdict.ERROR
+        verdict = TitanFormatHandler.VERDICTS.get(match[1],
+            base.TestVerdict.ERROR)
         test_case = base.TestCase(name, verdict)
         return test_case
