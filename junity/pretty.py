@@ -39,7 +39,6 @@ class PrettyFormatHandler(base.FormatHandler):
                                   """, re.VERBOSE)
 
     VERDICTS = {
-        "error": base.TestVerdict.ERROR,
         "fail": base.TestVerdict.FAILURE,
         "failure": base.TestVerdict.FAILURE,
         "pass": base.TestVerdict.SUCCESS,
@@ -98,9 +97,5 @@ class PrettyFormatHandler(base.FormatHandler):
         state.test_suite.append(test_case)
 
     def read_verdict(self, path, match):
-        verdict = PrettyFormatHandler.VERDICTS.get(match.group("verdict"))
-        if verdict is None:
-            raise base.FormatHandlerError(path, "This pretty-printed test " +
-                "report contains an unexpected verdict: \"" + str(verdict) +
-                "\".")
-        return verdict
+        return PrettyFormatHandler.VERDICTS.get(match.group("verdict"),
+            base.TestVerdict.ERROR)
