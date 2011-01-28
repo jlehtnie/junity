@@ -58,15 +58,11 @@ def main():
 
 
 def read(path):
-    infile = None
     try:
-        infile = open(path, "r")
-        return infile.read()
+        with open(path, "r") as infile:
+            return infile.read()
     except:
         return None
-    finally:
-        if infile is not None:
-            infile.close()
 
 
 def read_output(path, handlers):
@@ -78,16 +74,13 @@ def read_output(path, handlers):
             test_suites.extend(error.format())
     return test_suites
 
+
 def write(path, text):
-    outfile = None
     try:
-        outfile = open(path, "w")
-        outfile.write(text)
+        with open(path, "w") as outfile:
+            outfile.write(text)
     except:
         die(path, "cannot write file")
-    finally:
-        if outfile is not None:
-            outfile.close()
 
 
 def write_output(path, test_suites, pretty):
