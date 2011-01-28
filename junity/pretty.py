@@ -38,6 +38,15 @@ class PrettyFormatHandler(base.FormatHandler):
                                   $
                                   """, re.VERBOSE)
 
+    VERDICTS = {
+        "error": base.TestVerdict.ERROR,
+        "fail": base.TestVerdict.FAILURE,
+        "failure": base.TestVerdict.FAILURE,
+        "pass": base.TestVerdict.SUCCESS,
+        "success": base.TestVerdict.SUCCESS,
+        None: base.TestVerdict.SUCCESS
+    }
+
     def accept(self, path, text):
         return self.ACCEPT.search(text) is not None
 
@@ -63,9 +72,8 @@ class PrettyFormatHandler(base.FormatHandler):
         if self.EMPTY_LINE.match(line):
             return
         raise base.FormatHandlerError(path, "This pretty-printed test " +
-                                      "report contains a line that does " +
-                                      "not follow the expected format: \"" +
-                                      str(line) + "\".")
+            "report contains a line that does now follow the expected " +
+            "format: \"" + str(line) + "\".")
 
     def read_test_suite(self, path, match, state):
         name = match.group("name")
@@ -77,8 +85,7 @@ class PrettyFormatHandler(base.FormatHandler):
         test_suite_error = base.TestSuiteError(message)
         if state.test_suite is None:
             raise base.FormatHandlerError(path, "This pretty-printed test " +
-                                          "report contains a test suite " +
-                                          "error outside a test suite.")
+                "report contains a test suite error outside a test suite.")
         state.test_suite.append(test_suite_error)
 
     def read_test_case(self, path, match, state):
@@ -87,18 +94,13 @@ class PrettyFormatHandler(base.FormatHandler):
         test_case = base.TestCase(name, verdict)
         if state.test_suite is None:
             raise base.FormatHandlerError(path, "This pretty-printed test " +
-                                          "report contains a test case " +
-                                          "outside a test suite.")
+                "report contains a test case outside a test suite.")
         state.test_suite.append(test_case)
 
     def read_verdict(self, path, match):
-        verdict = match.group("verdict")
-        if verdict in (None, "success", "pass"):
-            return base.TestVerdict.SUCCESS
-        elif verdict in ("failure", "fail"):
-            return base.TestVerdict.FAILURE
-        elif verdict == "error":
-            return base.TestVerdict.ERROR
-        raise base.FormatHandlerError(path, "This pretty-printed test " +
-                                      "report contains an unexpected " +
-                                      "verdict: \"" + str(verdict) + "\".")
+        verdict = PrettyFormatHandler.VERDICTS.get(match.group("verdict"))
+        if verdict is None:
+            raise base.FormatHandlerError(path, "This pretty-printed test " +
+                "report contains an unexpected verdict: \"" + str(verdict) +
+                "\".")
+        return verdict
