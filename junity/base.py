@@ -15,8 +15,7 @@ class TestCase(object):
         self.verdict = verdict
 
     def to_pretty(self):
-        p = ""
-        p += "- " + self.name
+        p = "- " + self.name
         if self.verdict == TestVerdict.ERROR:
             p += ": error"
         if self.verdict == TestVerdict.FAILURE:
@@ -25,8 +24,7 @@ class TestCase(object):
         return p
 
     def to_xml(self):
-        x = ""
-        x += "<testcase name=\"" + self.name + "\""
+        x = "<testcase name=\"" + self.name + "\""
         if self.verdict == TestVerdict.ERROR:
             x += "><error /></testcase>"
         elif self.verdict == TestVerdict.FAILURE:
@@ -45,14 +43,10 @@ class TestSuiteError(object):
         self.message = message
 
     def to_pretty(self):
-        p = ""
-        p += "! " + self.message + "\n"
-        return p
+        return "! " + self.message + "\n"
 
     def to_xml(self):
-        x = ""
-        x += "<error message=\"" + self.message + "\" />"
-        return x
+        return "<error message=\"" + self.message + "\" />"
 
     def __str__(self):
         return self.to_xml()
@@ -68,15 +62,13 @@ class TestSuite(object):
         self.children.append(child)
 
     def to_pretty(self):
-        p = ""
-        p += self.name + "\n"
+        p = self.name + "\n"
         for child in self.children:
             p += child.to_pretty()
         return p
 
     def to_xml(self):
-        x = ""
-        x += "<testsuite name=\"" + self.name + "\">"
+        x = "<testsuite name=\"" + self.name + "\">"
         for child in self.children:
             x += child.to_xml()
         x += "</testsuite>"
@@ -104,8 +96,7 @@ class TestSuites(object):
         return p.rstrip()
 
     def to_xml(self):
-        x = ""
-        x += "<testsuites>"
+        x = "<testsuites>"
         for test_suite in self.test_suites:
             x += test_suite.to_xml()
         x += "</testsuites>"
@@ -134,13 +125,13 @@ class FormatHandlerError(Exception):
         return TestSuites([ self.test_suite ])
 
 
+def get_children_by_tag_name(element, name):
+    return filter(lambda x: x.parentNode is element,
+        element.getElementsByTagName(name))
+
+
 def parse_xml(path, text):
     try:
         return xml.dom.minidom.parseString(text)
     except:
         raise FormatHandlerError(path, "This XML file is not well-formed.")
-
-
-def get_children_by_tag_name(element, name):
-    return filter(lambda x: x.parentNode is element,
-        element.getElementsByTagName(name))
