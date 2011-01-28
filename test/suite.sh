@@ -1,126 +1,105 @@
 #!/bin/sh
 
+source lib.sh
+
 JUNITY="../bin/junity"
-READONLY_FILE="../examples/cannot-write-file.xml"
-RECEIVED="temp.xml"
 
-assert_equal()
-{
-    FILE1=$1
-    FILE2=$2
+test_stdout \
+    "File that cannot be read results in a test suite error     " \
+    "$JUNITY foo" \
+    "../examples/cannot-read-file.xml"
 
-    diff $FILE1 $FILE2 > /dev/null 2>&1
-    if [ $? == 0 ]
-    then
-        echo "pass"
-    else
-        echo "fail"
-    fi
-}
+test_stdout \
+    "Unknown file format results in a test suite error          " \
+    "$JUNITY ../Makefile" \
+    "../examples/unknown-file-format.xml"
 
-assert_file_equal1()
-{
-    ARGS=$1
-    EXPECTED=$2
+test_stdout \
+    "Bad file format results in a test suite error              " \
+    "$JUNITY ../junity/junit.py" \
+    "../examples/bad-file-format.xml"
 
-    write_to_file $ARGS
-    assert_equal $RECEIVED $EXPECTED
-    tear_down
-}
+test_stdout \
+    "Test suite errors in input files are preserved             " \
+    "$JUNITY ../examples/cannot-read-file.xml" \
+    "../examples/cannot-read-file.xml"
 
-assert_file_equal2()
-{
-    ARGS1=$1
-    ARGS2=$2
-    EXPECTED=$3
-
-    write_to_file $ARGS1
-    write_to_file $ARGS2
-    assert_equal $RECEIVED $EXPECTED
-    tear_down
-}
-
-assert_stderr_equal()
-{
-    ARGS=$1
-    EXPECTED=$2
-
-    STDERR_RECEIVED="stderr_received.txt"
-    STDERR_EXPECTED="stderr_expected.txt"
-
-    echo "$EXPECTED" > $STDERR_EXPECTED
-    $JUNITY $ARGS 2> $STDERR_RECEIVED
-    assert_equal $STDERR_EXPECTED $STDERR_RECEIVED
-    rm -f $STDERR_RECEIVED $STDERR_EXPECTED
-    tear_down
-}
-
-assert_stdout_equal()
-{
-    ARGS=$1
-    EXPECTED=$2
-
-    direct_to_file $ARGS
-    assert_equal $RECEIVED $EXPECTED
-    tear_down
-}
-
-direct_to_file()
-{
-    ARGS=$*
-    
-    $JUNITY $ARGS > $RECEIVED
-}
-
-tear_down()
-{
-    rm -f $RECEIVED
-}
-
-test_suite_setup()
-{
-    chmod u-w $READONLY_FILE
-}
-
-test_suite_teardown()
-{
-    chmod u+w $READONLY_FILE
-}
-
-write_to_file()
-{
-    ARGS=$*
-    
-    $JUNITY -o $RECEIVED $ARGS
-}
-
-test_suite_setup
-assert_stdout_equal "foo" "../examples/cannot-read-file.xml"
-assert_stdout_equal "../Makefile" "../examples/unknown-file-format.xml"
-assert_stdout_equal "../junity/junit.py" "../examples/bad-file-format.xml"
-assert_stdout_equal "boost/ExampleTest.xml" "../examples/ExampleTest.xml"
-assert_stdout_equal "boost/boost-report-level.xml" \
-    "../examples/boost-report-level.xml"
-assert_stdout_equal "boost/boost-test-log.xml" \
-    "../examples/boost-test-log.xml"
-assert_stdout_equal "junit/ExampleTest.xml" "../examples/ExampleTest.xml"
-assert_stdout_equal "titan/TitanTest.log" "../examples/TitanTest.xml"
-assert_stdout_equal "boost/ExampleTest.xml boost/ExampleTest.xml" \
-    "../examples/ExampleTest-ExampleTest.xml"
-assert_stdout_equal "-p boost/ExampleTest.xml boost/ExampleTest.xml" \
-    "../examples/ExampleTest-ExampleTest.txt"
-assert_stdout_equal "-p foo" "../examples/cannot-read-file.txt"
-assert_stdout_equal "../examples/ExampleTest.txt" \
+test_stdout \
+    "Boost test report is a supported input format              " \
+    "$JUNITY boost/ExampleTest.xml" \
     "../examples/ExampleTest.xml"
-assert_stdout_equal "../examples/ExampleTest-ExampleTest.txt" \
+
+test_stdout \
+    "Boost test report level must be detailed                   " \
+    "$JUNITY boost/boost-report-level.xml" \
+    "../examples/boost-report-level.xml"
+
+test_stdout \
+    "Boost test log results in a test suite error               " \
+    "$JUNITY boost/boost-test-log.xml" \
+    "../examples/boost-test-log.xml"
+
+test_stdout \
+    "JUnit test report is a supported input format              " \
+    "$JUNITY junit/ExampleTest.xml" \
+    "../examples/ExampleTest.xml"
+
+test_stdout \
+    "TITAN log file is a supported input format                 " \
+    "$JUNITY titan/TitanTest.log" \
+    "../examples/TitanTest.xml"
+
+test_stdout \
+    "Multiple test reports result in a combined test report     " \
+    "$JUNITY boost/ExampleTest.xml boost/ExampleTest.xml" \
     "../examples/ExampleTest-ExampleTest.xml"
-assert_stdout_equal "../examples/cannot-read-file.txt" \
+
+test_stdout \
+    "Pretty-print is a supported output format                  " \
+    "$JUNITY -p ../examples/ExampleTest.xml" \
+    "../examples/ExampleTest.txt"
+
+test_stdout \
+    "Pretty-print is a supported input format                   " \
+    "$JUNITY ../examples/ExampleTest.txt" \
+    "../examples/ExampleTest.xml"
+
+test_stdout \
+    "Test suite errors can be written to pretty-print           " \
+    "$JUNITY -p foo" \
+    "../examples/cannot-read-file.txt"
+
+test_stdout \
+    "Test suite errors can be read from pretty-print            " \
+    "$JUNITY ../examples/cannot-read-file.txt" \
     "../examples/cannot-read-file.xml"
-assert_file_equal1 "boost/ExampleTest.xml" "../examples/ExampleTest.xml"
-assert_file_equal2 "boost/ExampleTest.xml" "boost/ExampleTest.xml" \
+
+test_stdout \
+    "Multiple test reports can be read from pretty-print        " \
+    "$JUNITY ../examples/ExampleTest-ExampleTest.txt" \
     "../examples/ExampleTest-ExampleTest.xml"
-assert_stderr_equal "-o $READONLY_FILE boost/ExampleTest.xml" \
-    "cannot-write-file.xml: cannot write file"
-assert_stdout_equal "../examples/cannot-read-file.xml" \
-    "../examples/cannot-read-file.xml"
-test_suite_teardown
+
+test_stdout \
+    "Multiple test reports can be written to pretty-print       " \
+    "$JUNITY -p boost/ExampleTest.xml boost/ExampleTest.xml" \
+    "../examples/ExampleTest-ExampleTest.txt"
+
+READONLY_FILE="../examples/cannot-write-file.xml"
+chmod u-w $READONLY_FILE
+
+test_stderr \
+    "File that cannot be written results in program termination " \
+    "$JUNITY -o $READONLY_FILE ../examples/ExampleTest.xml" \
+    "`basename $READONLY_FILE`: cannot write file"
+
+chmod u+w $READONLY_FILE
+
+TEMP_FILE="suite.tmp"
+$JUNITY -o $TEMP_FILE boost/ExampleTest.xml junit/ExampleTest.xml
+
+test_stdout \
+    "Output can be directed to an output file                   " \
+    "cat $TEMP_FILE" \
+    "../examples/ExampleTest-ExampleTest.xml"
+
+rm -f $TEMP_FILE
