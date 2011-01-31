@@ -40,7 +40,7 @@ def main():
     except getopt.GetoptError:
         usage()
 
-    if len(args) == 0:
+    if len(args) == 0 and output is None:
         usage()
     
     handlers = [ BoostFormatHandler(),
@@ -92,4 +92,4 @@ def write_output(path, test_suites, pretty):
 
 
 def usage():
-    sys.exit("Usage: junity [-o FILE] [-p] FILE [FILE ...]")
+    sys.exit("Usage: junity [-o FILE] [-p] [FILE ...]")

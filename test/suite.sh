@@ -102,4 +102,20 @@ test_stdout \
     "cat $TEMP_FILE" \
     "../examples/ExampleTest-ExampleTest.xml"
 
+cp -f junit/ExampleTest.xml $TEMP_FILE
+$JUNITY -o $TEMP_FILE boost/ExampleTest.xml
+
+test_stdout \
+    "Input is appended to the output file                       " \
+    "cat $TEMP_FILE" \
+    "../examples/ExampleTest-ExampleTest.xml"
+
+cp -f boost/ExampleTest.xml $TEMP_FILE
+$JUNITY -o $TEMP_FILE
+
+test_stdout \
+    "Output file is converted to JUnit test report format       " \
+    "cat $TEMP_FILE" \
+    "../examples/ExampleTest.xml"
+
 rm -f $TEMP_FILE
