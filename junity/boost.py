@@ -1,16 +1,16 @@
 import junity.base as base
 
 
-class BoostFormatHandler(base.FormatHandler):
-
-    ERROR = "This Boost test report does not follow the expected format. " \
-        "Use --report_format=xml and --report_level=detailed."
+class Boost(object):
 
     VERDICTS = {
         "aborted": base.TestVerdict.ERROR,
         "failed": base.TestVerdict.FAILURE,
         "passed": base.TestVerdict.SUCCESS
     }
+
+
+class BoostFormatHandler(base.FormatHandler):
 
     def accept(self, path, text):
         return text.find("<TestSuite") != -1
@@ -31,7 +31,7 @@ class BoostFormatHandler(base.FormatHandler):
         for element in element.getElementsByTagName("TestCase"):
             test_suite.append(self.read_test_case(path, element))
         if len(test_suite.children) == 0:
-            raise base.FormatHandlerError(path, BoostFormatHandler.ERROR)
+            raise BoostFormatHandlerError(path)
         return test_suite
 
     def read_test_case(self, path, element):
@@ -42,7 +42,17 @@ class BoostFormatHandler(base.FormatHandler):
 
     def read_test_verdict(self, path, element):
         result = element.getAttribute("result")
-        verdict = BoostFormatHandler.VERDICTS.get(result)
+        verdict = Boost.VERDICTS.get(result)
         if verdict is None:
-            raise base.FormatHandlerError(path, BoostFormatHandler.ERROR)
+            raise BoostFormatHandlerError(path)
         return verdict
+
+
+class BoostFormatHandlerError(base.FormatHandlerError):
+
+    MESSAGE = "This Boost test report does not follow the expected format. " \
+        "Use --report_format=xml and --report_level=detailed."
+
+    def __init__(self, path):
+        base.FormatHandlerError.__init__(self, path,
+            BoostFormatHandlerError.MESSAGE)
