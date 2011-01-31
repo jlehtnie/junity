@@ -71,7 +71,7 @@ def read_output(path, handlers):
         try:
             test_suites.extend(handle(path, handlers))
         except base.FormatHandlerError, error:
-            test_suites.extend(error.format())
+            die(path, "cannot read file")
     return test_suites
 
 
