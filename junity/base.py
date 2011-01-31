@@ -2,10 +2,23 @@ import os.path
 import xml.dom.minidom
 
 
-class TestVerdict(object):
-    SUCCESS = 0
-    FAILURE = 1
-    ERROR = 2
+class FormatHandler(object):
+
+    def accept(self, path, text):
+        raise NotImplementedError
+
+    def read(self, path, text):
+        raise NotImplementedError
+
+
+class FormatHandlerError(Exception):
+
+    def __init__(self, path, message):
+        self.test_suite = TestSuite(os.path.basename(path))
+        self.test_suite.append(TestSuiteError(message))
+
+    def format(self):
+        return TestSuites([ self.test_suite ])
 
 
 class TestCase(object):
@@ -106,23 +119,10 @@ class TestSuites(object):
         return self.to_xml()
 
 
-class FormatHandler(object):
-
-    def accept(self, path, text):
-        raise NotImplementedError
-
-    def read(self, path, text):
-        raise NotImplementedError
-
-
-class FormatHandlerError(Exception):
-
-    def __init__(self, path, message):
-        self.test_suite = TestSuite(os.path.basename(path))
-        self.test_suite.append(TestSuiteError(message))
-
-    def format(self):
-        return TestSuites([ self.test_suite ])
+class TestVerdict(object):
+    SUCCESS = 0
+    FAILURE = 1
+    ERROR = 2
 
 
 def get_children_by_tag_name(element, name):
