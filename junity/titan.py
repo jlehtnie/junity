@@ -14,9 +14,9 @@ class Titan(object):
         """, re.VERBOSE)
 
     VERDICTS = {
-        "fail": base.TestVerdict.FAILURE,
-        "none": base.TestVerdict.FAILURE,
-        "pass": base.TestVerdict.SUCCESS
+        'fail': base.TestVerdict.FAILURE,
+        'none': base.TestVerdict.FAILURE,
+        'pass': base.TestVerdict.SUCCESS
     }
 
 

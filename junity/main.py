@@ -59,7 +59,7 @@ def main():
 
 def read(path):
     try:
-        with open(path, "r") as infile:
+        with open(path, 'r') as infile:
             return infile.read()
     except:
         return None
@@ -77,7 +77,7 @@ def read_output(path, handlers):
 
 def write(path, text):
     try:
-        with open(path, "w") as outfile:
+        with open(path, 'w') as outfile:
             outfile.write(text)
     except:
         die(path, "cannot write file")

@@ -34,10 +34,10 @@ class Pretty(object):
         """, re.VERBOSE)
 
     VERDICTS = {
-        "fail": base.TestVerdict.FAILURE,
-        "failure": base.TestVerdict.FAILURE,
-        "pass": base.TestVerdict.SUCCESS,
-        "success": base.TestVerdict.SUCCESS,
+        'fail': base.TestVerdict.FAILURE,
+        'failure': base.TestVerdict.FAILURE,
+        'pass': base.TestVerdict.SUCCESS,
+        'success': base.TestVerdict.SUCCESS,
         None: base.TestVerdict.SUCCESS
     }
 
@@ -78,12 +78,12 @@ class PrettyFormatHandler(base.FormatHandler):
             "format: \"" + str(line) + "\".")
 
     def read_test_suite(self, path, match, state):
-        name = match.group("name")
+        name = match.group('name')
         state.test_suite = base.TestSuite(name)
         state.test_suites.append(state.test_suite)
 
     def read_test_suite_error(self, path, match, state):
-        message = match.group("message")
+        message = match.group('message')
         test_suite_error = base.TestSuiteError(message)
         if state.test_suite is None:
             raise PrettyFormatHandlerError(path, "This pretty-printed test " +
@@ -91,7 +91,7 @@ class PrettyFormatHandler(base.FormatHandler):
         state.test_suite.append(test_suite_error)
 
     def read_test_case(self, path, match, state):
-        name = match.group("name")
+        name = match.group('name')
         verdict = self.read_verdict(path, match)
         test_case = base.TestCase(name, verdict)
         if state.test_suite is None:
@@ -100,7 +100,7 @@ class PrettyFormatHandler(base.FormatHandler):
         state.test_suite.append(test_case)
 
     def read_verdict(self, path, match):
-        verdict = match.group("verdict")
+        verdict = match.group('verdict')
         return Pretty.VERDICTS.get(verdict, base.TestVerdict.ERROR)
 
 
