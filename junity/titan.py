@@ -3,6 +3,23 @@ import re
 import junity.base as base
 
 
+class Titan(object):
+
+    VERDICT = re.compile(r"""
+        Test\ case\ 
+        (?P<testcase>[^\ ]+)\ 
+        finished.\ 
+        Verdict:\ 
+        (?P<verdict>[a-z]+)
+        """, re.VERBOSE)
+
+    VERDICTS = {
+        "fail": base.TestVerdict.FAILURE,
+        "none": base.TestVerdict.FAILURE,
+        "pass": base.TestVerdict.SUCCESS
+    }
+
+
 class TitanFormatHandler(base.FormatHandler):
 
     def accept(self, path, text):
@@ -22,23 +39,6 @@ class TitanFormatHandler(base.FormatHandler):
         verdict = Titan.VERDICTS.get(match[1], base.TestVerdict.ERROR)
         test_case = base.TestCase(name, verdict)
         return test_case
-
-
-class Titan(object):
-
-    VERDICT = re.compile(r"""
-        Test\ case\ 
-        (?P<testcase>[^\ ]+)\ 
-        finished.\ 
-        Verdict:\ 
-        (?P<verdict>[a-z]+)
-        """, re.VERBOSE)
-
-    VERDICTS = {
-        "fail": base.TestVerdict.FAILURE,
-        "none": base.TestVerdict.FAILURE,
-        "pass": base.TestVerdict.SUCCESS
-    }
 
 
 class TitanFormatHandlerError(base.FormatHandlerError):
