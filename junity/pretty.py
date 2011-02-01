@@ -3,40 +3,35 @@ import re
 import junity.base as base
 
 
-class PrettyFormatHandler(base.FormatHandler):
-
-    class State:
-        def __init__(self):
-            self.test_suites = []
-            self.test_suite = None
+class Pretty(object):
 
     ACCEPT = re.compile(r"^[!-] ", re.MULTILINE)
 
     EMPTY_LINE = re.compile(r"^\s*$")
 
     TEST_CASE = re.compile(r"""
-                           ^
-                           -\ 
-                           (?P<name>[^:]+)
-                           (
-                           :\ 
-                           (?P<verdict>\w+)
-                           )?
-                           $
-                           """, re.VERBOSE)
+        ^
+        -\ 
+        (?P<name>[^:]+)
+        (
+        :\ 
+        (?P<verdict>\w+)
+        )?
+        $
+        """, re.VERBOSE)
 
     TEST_SUITE = re.compile(r"""
-                            ^
-                            (?P<name>[^!-].*)
-                            $
-                            """, re.VERBOSE)
+        ^
+        (?P<name>[^!-].*)
+        $
+        """, re.VERBOSE)
 
     TEST_SUITE_ERROR = re.compile(r"""
-                                  ^
-                                  !\ 
-                                  (?P<message>.*)
-                                  $
-                                  """, re.VERBOSE)
+        ^
+        !\ 
+        (?P<message>.*)
+        $
+        """, re.VERBOSE)
 
     VERDICTS = {
         "fail": base.TestVerdict.FAILURE,
@@ -46,31 +41,39 @@ class PrettyFormatHandler(base.FormatHandler):
         None: base.TestVerdict.SUCCESS
     }
 
+
+class PrettyFormatHandler(base.FormatHandler):
+
+    class State:
+        def __init__(self):
+            self.test_suites = []
+            self.test_suite = None
+
     def accept(self, path, text):
-        return self.ACCEPT.search(text) is not None
+        return Pretty.ACCEPT.search(text) is not None
 
     def read(self, path, text):
-        state = self.State()
+        state = PrettyFormatHandler.State()
         for line in text.splitlines():
             self.read_line(path, line, state)
         return base.TestSuites(state.test_suites)
 
     def read_line(self, path, line, state):
-        match = self.TEST_SUITE.match(line)
+        match = Pretty.TEST_SUITE.match(line)
         if match:
             self.read_test_suite(path, match, state)
             return
-        match = self.TEST_CASE.match(line)
+        match = Pretty.TEST_CASE.match(line)
         if match:
             self.read_test_case(path, match, state)
             return
-        match = self.TEST_SUITE_ERROR.match(line)
+        match = Pretty.TEST_SUITE_ERROR.match(line)
         if match:
             self.read_test_suite_error(path, match, state)
             return
-        if self.EMPTY_LINE.match(line):
+        if Pretty.EMPTY_LINE.match(line):
             return
-        raise base.FormatHandlerError(path, "This pretty-printed test " +
+        raise PrettyFormatHandlerError(path, "This pretty-printed test " +
             "report contains a line that does now follow the expected " +
             "format: \"" + str(line) + "\".")
 
@@ -83,7 +86,7 @@ class PrettyFormatHandler(base.FormatHandler):
         message = match.group("message")
         test_suite_error = base.TestSuiteError(message)
         if state.test_suite is None:
-            raise base.FormatHandlerError(path, "This pretty-printed test " +
+            raise PrettyFormatHandlerError(path, "This pretty-printed test " +
                 "report contains a test suite error outside a test suite.")
         state.test_suite.append(test_suite_error)
 
@@ -92,10 +95,16 @@ class PrettyFormatHandler(base.FormatHandler):
         verdict = self.read_verdict(path, match)
         test_case = base.TestCase(name, verdict)
         if state.test_suite is None:
-            raise base.FormatHandlerError(path, "This pretty-printed test " +
+            raise PrettyFormatHandlerError(path, "This pretty-printed test " +
                 "report contains a test case outside a test suite.")
         state.test_suite.append(test_case)
 
     def read_verdict(self, path, match):
-        return PrettyFormatHandler.VERDICTS.get(match.group("verdict"),
-            base.TestVerdict.ERROR)
+        verdict = match.group("verdict")
+        return Pretty.VERDICTS.get(verdict, base.TestVerdict.ERROR)
+
+
+class PrettyFormatHandlerError(base.FormatHandlerError):
+
+    def __init__(self, path, message):
+        base.FormatHandlerError.__init__(self, path, message)
