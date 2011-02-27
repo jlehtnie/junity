@@ -18,7 +18,7 @@ JUnity is designed for continuous integration scripts. For reliability,
 operational failures (such as unreadable input files) do not cause program
 termination but are reported as test errors in the combined test report.
 
-JUnity is primarily targeted towards the Hudson continuous integration server.
+JUnity is primarily targeted towards the Jenkins continuous integration server.
 
 
 ### Options
