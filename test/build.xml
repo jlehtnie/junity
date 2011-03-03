@@ -2,16 +2,32 @@
 
     <property name="junit.dir" location="junit" />
 
+    <property name="maven.repo" value="http://repo1.maven.org/maven2" />
+    <property name="junit.version" value="4.8.2" />
+    <property name="junit.jar" value="junit-${junit.version}.jar" />
+    <property name="junit.url"
+      value="${maven.repo}/junit/junit/${junit.version}/${junit.jar}" />
+
     <property environment="env" />
     <path id="classpath">
         <pathelement location="${junit.dir}" />
-        <pathelement path="${env.CLASSPATH}" />
+        <pathelement location="${junit.dir}/${junit.jar}" />
     </path>
 
     <target name="all"
             depends="test" />
 
-    <target name="compile">
+    <target name="deps" depends="download-deps" />
+
+    <target name="check-deps">
+      <available file="${junit.dir}/${junit.jar}" property="deps.exist" />
+    </target>
+
+    <target name="download-deps" depends="check-deps" unless="deps.exist">
+      <get src="${junit.url}" dest="${junit.dir}" />
+    </target>
+
+    <target name="compile" depends="deps">
         <javac srcdir="${junit.dir}"
                includeantruntime="false">
             <classpath refid="classpath" />

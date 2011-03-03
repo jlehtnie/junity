@@ -72,8 +72,8 @@ the environment variables `CPLUS_INCLUDE_PATH` and `LIBRARY_PATH` can be used.
 Additionally, on GNU/Linux `LD_LIBRARY_PATH` and on Mac OS X
 `DYLD_LIBRARY_PATH` should be set to `$LIBRARY_PATH`.
 
-JUnit test reports require Java, Ant and JUnit. The JUnit JAR must be in the
-`CLASSPATH` environment variable.
+JUnit test reports require Java and Ant.
+
 
 License
 -------
