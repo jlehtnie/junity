@@ -1,4 +1,4 @@
-import junity.base as base
+from . import base
 
 
 class Boost(object):

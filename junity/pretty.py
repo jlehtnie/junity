@@ -1,6 +1,6 @@
 import os.path
 import re
-import junity.base as base
+from . import base
 
 
 class Pretty(object):

@@ -1,11 +1,12 @@
 import getopt
 import os.path
 import sys
-import junity.base as base
-from junity.boost import BoostFormatHandler
-from junity.junit import JUnitFormatHandler
-from junity.pretty import PrettyFormatHandler
-from junity.titan import TitanFormatHandler
+
+from . import base
+from .boost import BoostFormatHandler
+from .junit import JUnitFormatHandler
+from .pretty import PrettyFormatHandler
+from .titan import TitanFormatHandler
 
 
 def die(path, message):
