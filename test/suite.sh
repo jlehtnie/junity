@@ -5,21 +5,6 @@ source lib.sh
 JUNITY="../bin/junity"
 
 test_stdout \
-    "File that cannot be read results in a test suite error        " \
-    "$JUNITY foo" \
-    "../examples/cannot-read-file.xml"
-
-test_stdout \
-    "Unknown file format results in a test suite error             " \
-    "$JUNITY ../Makefile" \
-    "../examples/unknown-file-format.xml"
-
-test_stdout \
-    "Bad file format results in a test suite error                 " \
-    "$JUNITY ../junity/junit.py" \
-    "../examples/bad-file-format.xml"
-
-test_stdout \
     "Test suite errors in input files are preserved                " \
     "$JUNITY ../examples/cannot-read-file.xml" \
     "../examples/cannot-read-file.xml"
