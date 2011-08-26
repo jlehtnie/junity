@@ -1,5 +1,13 @@
 Feature: Error handling
 
+  Scenario: No input files
+    When I run "bin/junity"
+    Then the standard error should equal
+      """
+      Usage: junity [-o FILE] [-p] [FILE ...]
+      """
+    And the return code should not equal 0
+
   Scenario: Cannot read file
     When I run "bin/junity foo"
     Then the standard output should equal
