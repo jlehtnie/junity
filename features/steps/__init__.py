@@ -1,4 +1,5 @@
 import os
+import re
 import shlex
 import subprocess
 
@@ -35,6 +36,13 @@ def normalize_text(text):
 def normalize_xml(xml):
     tree = ElementTree.XML(xml)
     for elem in tree.iter():
-        elem.text = elem.text.strip() if elem.text is not None else None
-        elem.tail = elem.tail.strip() if elem.tail is not None else None
+        elem.text = strip(elem.text) if elem.text is not None else None
+        elem.tail = strip(elem.tail) if elem.tail is not None else None
+        attrib = {}
+        for name, value in elem.items():
+            attrib[name] = strip(value)
+        elem.attrib = attrib
     return ElementTree.tostring(tree)
+
+def strip(text):
+    return re.sub('\s+', ' ', text, 0, re.MULTILINE).strip()

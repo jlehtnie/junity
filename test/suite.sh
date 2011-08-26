@@ -10,21 +10,6 @@ test_stdout \
     "../examples/cannot-read-file.xml"
 
 test_stdout \
-    "Boost test report is a supported input format                 " \
-    "$JUNITY boost/ExampleTest.xml" \
-    "../examples/ExampleTest.xml"
-
-test_stdout \
-    "Boost test report level must be detailed                      " \
-    "$JUNITY boost/boost-report-level.xml" \
-    "../examples/boost-report-level.xml"
-
-test_stdout \
-    "Boost test log results in a test suite error                  " \
-    "$JUNITY boost/boost-test-log.xml" \
-    "../examples/boost-test-log.xml"
-
-test_stdout \
     "JUnit test report is a supported input format                 " \
     "$JUNITY junit/ExampleTest.xml" \
     "../examples/ExampleTest.xml"
