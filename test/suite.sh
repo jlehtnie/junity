@@ -10,11 +10,6 @@ test_stdout \
     "../examples/cannot-read-file.xml"
 
 test_stdout \
-    "JUnit test report is a supported input format                 " \
-    "$JUNITY junit/ExampleTest.xml" \
-    "../examples/ExampleTest.xml"
-
-test_stdout \
     "TITAN log file is a supported input format                    " \
     "$JUNITY titan/TitanTest.log" \
     "../examples/TitanTest.xml"
